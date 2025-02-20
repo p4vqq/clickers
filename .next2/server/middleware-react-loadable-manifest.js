@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components\\\\Loading.tsx -> @twa-dev/sdk\":{\"id\":\"components\\\\Loading.tsx -> @twa-dev/sdk\",\"files\":[\"static/chunks/_app-pages-browser_node_modules_twa-dev_sdk_dist_index_js.js\"]}}"
