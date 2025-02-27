@@ -18,16 +18,18 @@ import tapStyles from './Animation.module.scss'; // Импортируем SCSS 
 import Animation from './Animation';
 import Animation2 from './Animation2';
 import Animation3 from './Animation3';
+import Navigation from '@/components/Navigation'; // Импортируем компонент Navigation
+import LeaderboardTab from '@/components/LeaderboardTab'; // Импортируем компонент LeaderboardTab
+import SquadsPage from '@/components/SquadsPage'; // Импортируем SquadsPage из app
 
 interface GameProps {
     currentView: string;
     setCurrentView: (view: string) => void;
 }
 
-
-
-
 export default function Game({ currentView, setCurrentView }: GameProps) {
+    console.log("Current View in Game:", currentView); // Лог для проверки currentView
+
     const [isAnimationEnabled, setIsAnimationEnabled] = useState(true);
 
     useEffect(() => {
@@ -145,99 +147,133 @@ export default function Game({ currentView, setCurrentView }: GameProps) {
                 return <Animation2 />;
             case 2:
                 return <Animation3 />;
+            // Добавьте другие уровни, если нужно
             default:
                 return <Animation />;
         }
     };
 
+    // Функция для выбора фона в зависимости от уровня
+    const renderBackground = () => {
+        if (gameLevelIndex >= 0 && gameLevelIndex <= 2) {
+            // Уровни 1-3
+            return (
+                <div className={styles.starsBackground} style={{ zIndex: 0, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <div className={styles.stars}></div>
+                    <div className={styles.stars2}></div>
+                    <div className={styles.stars3}></div>
+                </div>
+            );
+        } else if (gameLevelIndex >= 3 && gameLevelIndex <= 8) {
+            // Уровни 4-9
+            return (
+                <div className={styles2.starsBackground1} style={{ zIndex: 0, position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}>
+                    <div className={styles2.stars_lv3}></div>
+                    <div className={styles2.stars2_lv3}></div>
+                    <div className={styles2.stars3_lv3}></div>
+                </div>
+            );
+        }
+        return null; // На случай, если уровни выйдут за пределы 0-8
+    };
 
     return (
-        <div className="bg-black flex justify-center min-h-screen">
-            <div className="w-full bg-black text-white h-screen font-bold flex flex-col max-w-xl">
+        <div className="bg-black flex justify-center h-screen overflow-hidden">
+            <div className="w-full bg-black text-white h-full font-bold flex flex-col max-w-xl relative">
+                {/* Шапка */}
                 <TopInfoSection isGamePage={true} setCurrentView={setCurrentView} />
 
-                <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow z-0">
-                    <div className="mt-[2px] rounded-t-[46px] h-full overflow-y-auto no-scrollbar relative">
-                        {/* Уровневые блоки */}
-                        {gameLevelIndex === 0 && (
-                            <div className="flex-grow relative">
-                                <div className={styles.starsBackground}>
-                                    <div className={styles.stars}></div>
-                                    <div className={styles.stars2}></div>
-                                    <div className={styles.stars3}></div>
-                                </div>
-                            </div>
-                        )}
-                        {gameLevelIndex === 1 && (
-                            <div className={styles.spaceBackground}>
-                                <div className={styles.planets}></div>
-                                <div className={styles.comets}></div>
-                            </div>
-                        )}
-                        {gameLevelIndex === 2 && (
-                            <div className={styles2.starsBackground1}>
-                                <div className={styles2.stars_lv3}></div>
-                                <div className={styles2.stars2_lv3}></div>
-                                <div className={styles2.stars3_lv3}></div>
-                            </div>
-                        )}
+                {/* Основной контент */}
+                {currentView === 'game' && (
+                    <div className="flex-grow mt-4 bg-[#f3ba2f] rounded-t-[48px] relative top-glow overflow-y-auto">
+                        {/* Фон в зависимости от уровня */}
+                        {renderBackground()}
 
-                        <div className="px-4 pt-1 pb-24 relative z-10">
-                            {/* Основной контент игры */}
-                            <div className="px-4 mt-4 flex justify-center">
-                                <div className="px-4 py-2 flex items-center space-x-2">
-                                    <IceCubes className="w-12 h-12 mx-auto" />
-                                    <p className="text-4xl text-white" suppressHydrationWarning >{Math.floor(pointsBalance).toLocaleString()}</p>
+                        {/* Остальной контент страницы */}
+                        <div className="px-4 pb-24 relative z-10">
+                            {/* Верхнее меню */}
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-2xl">👫</span>
+                                    <span className="text-2xl">🠒</span>
+                                    <span className="text-2xl">📱</span>
                                 </div>
                             </div>
 
-                            <div className="flex justify-center gap-2">
-                                <p>{LEVELS[gameLevelIndex].name}</p>
-                                <p className="text-[#95908a]" >&#8226;</p>
-                                <p>{gameLevelIndex + 1} <span className="text-[#95908a]">/ {LEVELS.length}</span></p>
+                            {/* Заголовок и описание */}
+                            <div className="text-left mb-4">
+                                <h1 className="text-lg text-white mb-1">Приглашай друзей</h1>
+                                <div className="text-xs text-white">
+                                    <p></p>
+                                    <p className="text-xs text-white-400 mt-1">Распространяй приложение среди друзей. Приглашай их присоединиться к Iceton и зарабатывай % от их майнинга</p>
+                                </div>
                             </div>
 
-                            <div className="px-4 mt-4 flex justify-center">
+                            {/* Плитки с бонусами */}
+                            <div className="flex space-x-4 mb-4">
+                                {/* Левая плитка: Льдышки и уровень */}
+                                <div className="flex-1 bg-gradient-to-r from-[#2a2e35] to-[#1d2025] p-3 rounded-xl shadow-lg">
+                                    <div className="flex items-center space-x-2 mb-2">
+                                        <IceCube className="w-6 h-6" />
+                                        <p className="text-lg font-bold text-white">{pointsBalance.toLocaleString()}</p>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mb-1">Уровень {gameLevelIndex + 1}</p>
+                                    <p className="text-sm font-bold text-white mb-1">{LEVELS[gameLevelIndex].name}</p>
+                                    <div className="w-full h-1.5 bg-[#43433b]/[0.6] rounded-full mb-1">
+                                        <div className="progress-gradient h-1.5 rounded-full" style={{ width: `${calculateProgress()}%` }}></div>
+                                    </div>
+                                    <p className="text-xs text-gray-400">
+                                        {calculateProgress().toFixed(1)}% до уровня {gameLevelIndex + 2}
+                                    </p>
+                                </div>
+
+                                {/* Правая плитка: Энергия и доход за клик */}
+                                <div className="flex-1 bg-gradient-to-r from-[#2a2e35] to-[#1d2025] p-3 rounded-xl shadow-lg">
+                                    <div className="flex items-center space-x-2 mb-2">
+                                        <Energy className="w-6 h-6" />
+                                        <p className="text-lg font-bold text-white">{energy}/{maxEnergy}</p>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mb-1">Доход за клик: </p>
+                                    <p className="text-lg font-bold text-white">+{pointsPerClick}</p>
+                                    <button
+                                        onClick={() => handleViewChange("boost")}
+                                        className="w-full py-1.5 bg-[#f3ba2f] text-black font-bold rounded-lg shadow-lg hover:shadow-xl transition-shadow text-sm"
+                                    >
+                                        <Rocket size={16} className="inline-block mr-1" />
+                                        Бустеры
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Область анимации */}
+                            <div className="px-4 mt-2 flex justify-center">
                                 <div
-                                    className="w-80 h-80 p-4"
+                                    className="w-70 h-70 p- min-w-[280px] min-h-[280px]"
                                     onClick={handleInteraction}
                                     onTouchEnd={handleInteraction}
                                 >
-                                    <div className="w-full h-full display: flex justify-content overflow-hidden relative">
+                                    <div className="w-full h-full flex justify-center items-center overflow-hidden relative">
                                         <section className="background">
                                             {renderAnimation()}
                                         </section>
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div className="flex justify-between px-4 mt-4">
-                                <p className="flex justify-center items-center gap-1">
-                                    <Image src={lightning} alt="Exchange" width={40} height={40} />
-                                    <span className="flex flex-col">
-                                        <span className="text-xl font-bold">{energy}</span>
-                                        <span className="text-base font-medium">/ {maxEnergy}</span>
-                                    </span>
-                                </p>
-                                <button onClick={() => handleViewChange("boost")} className="flex justify-center items-center gap-1">
-                                    <Rocket size={40} />
-                                    <span className="text-xl">Boost</span>
-                                </button>
-                            </div>
-
-                            <div className="w-full px-4 text-sm mt-2">
-                                <div className="flex items-center mt-1 border-2 border-[#43433b] rounded-full">
-                                    <div className="w-full h-3 bg-[#43433b]/[0.6] rounded-full">
-                                        <div className="progress-gradient h-3 rounded-full" style={{ width: `${calculateProgress()}%` }}></div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
+                )}
+
+                {/* Лидерборд */}
+                {currentView === 'leaderboardtab' && <LeaderboardTab />}
+
+                {/* Squads Page */}
+                {currentView === 'squadspage' && <SquadsPage />}
             </div>
 
+            {/* Меню */}
+            <Navigation currentView={currentView} setCurrentView={setCurrentView} />
+
+            {/* Анимация кликов */}
             {clicks.map((click) => (
                 <div
                     key={click.id}

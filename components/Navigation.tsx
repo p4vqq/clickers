@@ -1,19 +1,4 @@
-// components/Navigation.tsx
-
-/**
- * This project was developed by Nikandr Surkov.
- * You may not use this code if you purchased it from any source other than the official website https://nikandr.com.
- * If you purchased it from the official website, you may use it for your own projects,
- * but you may not resell it or publish it publicly.
- * 
- * Website: https://nikandr.com
- * YouTube: https://www.youtube.com/@NikandrSurkov
- * Telegram: https://t.me/nikandr_s
- * Telegram channel for news/updates: https://t.me/clicker_game_news
- * GitHub: https://github.com/nikandr-surkov
- */
-
-'use client'
+'use client';
 
 import Image, { StaticImageData } from 'next/image';
 import Mine from '@/icons/Mine';
@@ -30,7 +15,7 @@ type NavItem = {
     name: string;
     icon?: FC<IconProps> | null;
     image?: StaticImageData | null;
-    view: string;
+    view: string; // Используем view для управления состоянием
 };
 
 const navItems: NavItem[] = [
@@ -39,7 +24,8 @@ const navItems: NavItem[] = [
     { name: 'Friends', icon: Friends, view: 'friends' },
     { name: 'Earn', icon: Coins, view: 'earn' },
     { name: 'Airdrop', image: iceToken, view: 'airdrop' },
-    { name: 'Cash', image: iceToken, view: 'Cash' },
+    { name: 'Leaderboard', icon: Rocket, view: 'leaderboardtab' },
+    { name: 'Squads', icon: Rocket, view: 'squadspage' },
 ];
 
 interface NavigationProps {
@@ -48,18 +34,12 @@ interface NavigationProps {
 }
 
 export default function Navigation({ currentView, setCurrentView }: NavigationProps) {
-    console.log('Navigation props:', {
-        currentView,
-        setCurrentView,
-        isSetCurrentViewFunction: typeof setCurrentView === 'function'
-    });
-
     const handleViewChange = (view: string) => {
         console.log('Attempting to change view to:', view);
         if (typeof setCurrentView === 'function') {
             try {
                 triggerHapticFeedback(window);
-                setCurrentView(view);
+                setCurrentView(view); // Обновляем текущий view
                 console.log('View change successful');
             } catch (error) {
                 console.error('Error occurred while changing view:', error);
@@ -69,34 +49,29 @@ export default function Navigation({ currentView, setCurrentView }: NavigationPr
         }
     };
 
-    if (typeof setCurrentView !== 'function') {
-        console.error('setCurrentView is not a function. Navigation cannot be rendered properly.');
-        return null; // or return some fallback UI
-    }
-
     return (
-        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] w-full max-w-xl bg-[#272a2f] flex justify-around items-center z-40 text-xs border-t border-[#43433b] max-h-24">
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-xl bg-white flex justify-around items-center z-40 text-xs border-t border-[#e0e0e0] max-h-20 rounded-t-lg">
             {navItems.map((item) => (
                 <button
                     key={item.name}
                     onClick={() => handleViewChange(item.view)}
                     className="flex-1"
                 >
-                    <div className={`flex flex-col items-center justify-center ${currentView === item.view ? 'text-white bg-[#1c1f24]' : 'text-[#85827d]'} h-16 m-1 p-2 rounded-2xl`}>
-                        <div className="w-8 h-8 relative">
+                    <div className={`flex flex-col items-center justify-center ${currentView === item.view ? 'text-[#1a1a1a] bg-[#f0f0f0]' : 'text-[#333333]'} h-14 m-1 p-2 rounded-md`}>
+                        <div className="w-6 h-6 relative">
                             {item.image && (
                                 <div className="w-full h-full relative">
                                     <Image
                                         src={item.image}
                                         alt={item.name}
-                                        width={32}
-                                        height={32}
+                                        width={24}
+                                        height={24}
                                     />
                                 </div>
                             )}
                             {item.icon && <item.icon className="w-full h-full" />}
                         </div>
-                        <p className="mt-1">{item.name}</p>
+                        <p className="mt-1 text-[#1a1a1a]">{item.name}</p>
                     </div>
                 </button>
             ))}

@@ -46,6 +46,10 @@ import paidTrophy2 from "./paid-trophy2.png";
 import botUrlQr from "./bot-url-qr.png";
 export { default as toncoin } from './toncoin.png'; // Добавьте этот экспорт
 export { default as usdt } from './usdt.png'; // Добавьте этот экспорт
+export { default as wallet } from './wallet.png'; // Добавьте этот экспорт
+export { default as trophy } from './trophy.webp'; // Добавьте этот экспорт
+export { default as Squads } from './Squads.png'; // Добавьте этот экспорт
+
 
 
 export {

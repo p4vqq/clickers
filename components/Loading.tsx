@@ -35,7 +35,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
   const openTimestampRef = useRef(Date.now());
   const [isAppropriateDevice, setIsAppropriateDevice] = useState(true);
 
-
   const fetchOrCreateUser = useCallback(async () => {
     try {
       let initData, telegramId, username, telegramName, startParam;
@@ -54,7 +53,6 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
 
         startParam = WebApp.initDataUnsafe.start_param;
       }
-
 
       const referrerTelegramId = startParam ? startParam.replace('kentId', '') : null;
 
@@ -105,6 +103,7 @@ export default function Loading({ setIsInitialized, setCurrentView }: LoadingPro
         mineLevelIndex: userData.mineLevelIndex,
         profitPerHour: calculateProfitPerHour(userData.mineLevelIndex),
         tonWalletAddress: userData?.tonWalletAddress,
+        squad: null, // Добавляем squad с значением по умолчанию
       };
 
       console.log("Initial state: ", initialState);

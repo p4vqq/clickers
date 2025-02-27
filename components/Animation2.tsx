@@ -6,7 +6,7 @@ const Animation = () => {
     return (
 
         <div className={tapStyles.hover}>
-            <svg className={tapStyles.illustration} width="80" height="80" viewBox="0 0 438 548">
+            <svg className={tapStyles.illustration} width="200" height="300" viewBox="0 0 438 548">
 
 
                 <defs>

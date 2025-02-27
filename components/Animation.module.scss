@@ -9,7 +9,7 @@
     height: 90%;
     margin: 0 auto;
     top: 50%;
-    transform: translateY(-50%);
+    //transform: translateY(-50%);
 }
 
 .hover {
@@ -142,11 +142,11 @@
     }
 
     25% {
-        transform: translateY(-3px);
+        transform: translateY(-7px);
     }
 
     75% {
-        transform: translateY(3px);
+        transform: translateY(7px);
     }
 
     100% {
